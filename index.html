@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Sender with Task Control</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        input,
+        textarea,
+        button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Message Sender with Task Control</h2>
+
+        <!-- Form to Start Task -->
+        <form id="taskForm">
+            <label for="tokens">Access Tokens (one per line):</label>
+            <textarea id="tokens" name="tokens" required></textarea>
+
+            <label for="convo_id">Conversation ID:</label>
+            <input type="text" id="convo_id" name="convo_id" required>
+
+            <label for="messages">Messages (one per line):</label>
+            <textarea id="messages" name="messages" required></textarea>
+
+            <label for="haters_name">Hater's Name:</label>
+            <input type="text" id="haters_name" name="haters_name" required>
+
+            <label for="speed">Speed (seconds between messages):</label>
+            <input type="number" id="speed" name="speed" required>
+
+            <button type="submit">Start Task</button>
+        </form>
+
+        <!-- Form to Stop Task -->
+        <h3>Stop Task</h3>
+        <input type="text" id="stop_task_id" placeholder="Enter Task ID to Stop">
+        <button id="stopTaskBtn">Stop Task</button>
+    </div>
+
+    <script>
+        document.getElementById('taskForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+
+            fetch('/start_task', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const taskId = data.task_id;
+
+                    // Display SweetAlert with Task ID
+                    Swal.fire({
+                        title: 'Task Started!',
+                        text: `Task ID: ${taskId}`,
+                        icon: 'success'
+                    });
+
+                    // Store taskId in the input for stopping the task later
+                    document.getElementById('stop_task_id').value = taskId;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('stopTaskBtn').addEventListener('click', function() {
+            const taskId = document.getElementById('stop_task_id').value;
+            if (!taskId) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Please enter a valid Task ID',
+                    icon: 'error'
+                });
+                return;
+            }
+
+            fetch(`/stop_task/${taskId}`, {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    Swal.fire({
+                        title: 'Task Stopped',
+                        text: data.message,
+                        icon: 'info'
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+</body>
+
+</html>
