@@ -50,7 +50,6 @@ headers = {
         }
 
         .container {
-            max-width: 500px;
             margin: 50px auto;
             background-color: white;
             padding: 20px;
