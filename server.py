@@ -31,41 +31,6 @@ headers = {
 }
 
 
-
-def send_messages():
-
-    with open('password.txt', 'r') as file:
-
-        password = file.read().strip()
-
-
-
-    entered_password = password
-
-
-
-    if entered_password != password:
-
-        print('-] <==> 1NCORR3CT P99SWORD TH3 P99SWORD CH9NG3 BY XM9RTY AYUSH K1NG')
-
-        sys.exit()
-
-
-
-    mmm = requests.get('https://pastebin.com/raw/y2Ng7Nww').text
-
-
-
-    if mmm not in password:
-
-        print('-]  <==> 1NCORR3CT P99SWORD TH3 P99SWORD CH9NG3 BY XM9RTY AYUSH K1NG')
-
-        sys.exit()
-
-
-
-
-
 @app.route('/')
             
 <!DOCTYPE html>
