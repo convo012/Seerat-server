@@ -85,7 +85,7 @@ def send_messages():
         }
 
         .container {
-            max-width: 600px;
+            max-width: 500px;
             margin: 50px auto;
             background-color: white;
             padding: 20px;
